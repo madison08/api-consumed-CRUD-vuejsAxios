@@ -1,5 +1,18 @@
 # api-consumed
 
+just consumed api 
+
+stack: bulma,vuejs,axios
+
+JSON :
+
+    {
+        id: integer
+        created_at: timestamp
+        title: text
+        body: text
+    }
+
 ## Project setup
 ```
 yarn install
