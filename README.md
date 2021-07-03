@@ -4,6 +4,10 @@ just consumed api
 
 stack: bulma,vuejs,axios
 
+API DOC:
+
+https://x8ki-letl-twmt.n7.xano.io/api:aGRFFROk
+
 JSON :
 
     {
