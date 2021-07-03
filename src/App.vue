@@ -42,6 +42,12 @@
         <p class="control">
           <button @click="createPosts" type="submit" class="button is-success">
             Enregistrer
+
+            
+<div v-if="isloading" class="loadingio-spinner-spinner-qqf9pv1wftq"><div class="ldio-mre0kqwph9c">
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+</div></div>
+
           </button>
         </p>
       </div>
@@ -89,8 +95,13 @@
 
 
     <div id="parent" class="columns is-multiline" style="margin-top: 40px;" v-if="datas.length > 0">
-      <div class="column is-one-third" v-for="data in datas" :key="data.id">
-
+      <div v-if="isloadingDel" style="margin: 0 auto;" class="loadingio-spinner-spinner-xaofdxnrom"><div class="ldio-r34yt6996o">
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+</div></div>
+      <div v-else class="column is-one-third" v-for="data in datas" :key="data.id">
+        
+        
+        
         <div class="card">
           <header class="card-header">
             <p class="card-header-title" @blur="updatePost(data.id)" :id="'title' + data.id" :class="{ editing: data.id === editing }" :contenteditable="data.id === editing">
@@ -109,8 +120,8 @@
             </div>
           </div>
           <footer class="card-footer">
-            <span class="card-footer-item has-background-danger has-text-white cp" @click="deletePost(data.id)">Supprimer</span>
-            <span class="card-footer-item has-background-info has-text-white cp" @click="editPost(data.id)"> Editer </span>
+            <span class="card-footer-item cp" @click="deletePost(data.id)">Supprimer</span>
+            <span class="card-footer-item cp" @click="editPost(data.id)"> Editer </span>
           </footer>
         </div>
 
@@ -165,6 +176,9 @@ export default {
       datas: [],
       postTitle: null,
       postBody: null,
+      isloading: false,
+
+      isloadingDel: false,
 
       edit: false,
       editing: null
@@ -175,23 +189,33 @@ export default {
   methods:{
     createPosts(){
 
+      this.isloading = true
+
       axios.post(apiUri, {
-          titles: this.postTitle,
-          bodys: this.postBody
+          title: this.postTitle,
+          body: this.postBody
       })
       .then(response => {
 
+        this.isloading = false
+
         this.datas.push(response.data)
 
-        swal("Good job!", "Votre article a ete ajouter avec!", "success");
+        swal("succès!", "Votre article a ete ajouter!", "success");
+
+        this.postTitle = '';
+        this.postBody = ''
 
         // this.datas = response.data
         console.log(response)
 
       }).catch(error => {
 
+        this.isloading = false
+
         swal({
-          title: "Erreur lors de l'ajout"
+          title: "Erreur lors de l'ajout",
+          dangerMode: true
         });
 
 
@@ -242,10 +266,48 @@ export default {
     },
 
     deletePost(id){
+      swal({
+        title: "êtes-vous sûr ?",
+        text: "Une fois supprimé, vous ne pourrez plus récupérer cet article !",
+        icon: "warning",
+        buttons: ["Annuler", true],
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+
+          this.isloadingDel = true;
+          
+          axios.delete(apiUri + `/${id}`)
+          .then(response => {
+
+          this.isloadingDel = false;
+
+
+            console.log(response)
+
+            this.datas.splice(this.datas.findIndex(curr => curr.id == id), 1)
+
+            swal("Pouf ! Votre article a été supprimé !", {
+              icon: "success",
+            });
+
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        } 
+      });
+    },
+
+    deletePostConfirm(id){
 
       console.log(id)
 
       const post = this.datas.find(post => post.id === id )
+
+
+      
 
       axios.delete(apiUri + `/${id}`)
       .then(response => {
@@ -315,4 +377,191 @@ export default {
   .cp{
     cursor: pointer;
   }
+
+
+
+
+@keyframes ldio-mre0kqwph9c {
+  0% { opacity: 1 }
+  100% { opacity: 0 }
+}
+.ldio-mre0kqwph9c div {
+  left: 47px;
+  top: 24px;
+  position: absolute;
+  animation: ldio-mre0kqwph9c linear 1s infinite;
+  background: #ffffff;
+  width: 6px;
+  height: 12px;
+  border-radius: 3px / 6px;
+  transform-origin: 3px 26px;
+}.ldio-mre0kqwph9c div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -0.9166666666666666s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -0.8333333333333334s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.75s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.6666666666666666s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.5833333333333334s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.5s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.4166666666666667s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.3333333333333333s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.25s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.16666666666666666s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.08333333333333333s;
+  background: #ffffff;
+}.ldio-mre0kqwph9c div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+  background: #ffffff;
+}
+.loadingio-spinner-spinner-qqf9pv1wftq {
+  width: 51px;
+  height: 51px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+}
+.ldio-mre0kqwph9c {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(0.51);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-mre0kqwph9c div { box-sizing: content-box; }
+/* generated by https://loading.io/ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes ldio-r34yt6996o {
+  0% { opacity: 1 }
+  100% { opacity: 0 }
+}
+.ldio-r34yt6996o div {
+  left: 94px;
+  top: 48px;
+  position: absolute;
+  animation: ldio-r34yt6996o linear 1s infinite;
+  background: #000000;
+  width: 12px;
+  height: 24px;
+  border-radius: 6px / 12px;
+  transform-origin: 6px 52px;
+}.ldio-r34yt6996o div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -0.9166666666666666s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -0.8333333333333334s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.75s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.6666666666666666s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.5833333333333334s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.5s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.4166666666666667s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.3333333333333333s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.25s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.16666666666666666s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.08333333333333333s;
+  background: #000000;
+}.ldio-r34yt6996o div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+  background: #000000;
+}
+.loadingio-spinner-spinner-xaofdxnrom {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+}
+.ldio-r34yt6996o {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-r34yt6996o div { box-sizing: content-box; }
+/* generated by https://loading.io/ */
+
+
+
+
 </style>
