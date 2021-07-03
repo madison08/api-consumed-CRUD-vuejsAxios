@@ -6,8 +6,11 @@
     <!-- <p class="title"> -->
 
       <div class="container">
-        
-      Article
+      
+      <p class="title">
+        Article
+      </p>
+      
     <!-- </p> -->
     <p class="subtitle">
       <!-- Primary subtitle -->
@@ -120,8 +123,12 @@
             </div>
           </div>
           <footer class="card-footer">
-            <span class="card-footer-item cp" @click="deletePost(data.id)">Supprimer</span>
-            <span class="card-footer-item cp" @click="editPost(data.id)"> Editer </span>
+            <span class="card-footer-item cp" @click="deletePost(data.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/></svg>
+            </span>
+            <span class="card-footer-item cp" @click="editPost(data.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18 14.45v6.55h-16v-12h6.743l1.978-2h-10.721v16h20v-10.573l-2 2.023zm1.473-10.615l1.707 1.707-9.281 9.378-2.23.472.512-2.169 9.292-9.388zm-.008-2.835l-11.104 11.216-1.361 5.784 5.898-1.248 11.103-11.218-4.536-4.534z"/></svg>
+            </span>
           </footer>
         </div>
 
@@ -179,6 +186,7 @@ export default {
       isloading: false,
 
       isloadingDel: false,
+      isloadingEd: false,
 
       edit: false,
       editing: null
@@ -225,6 +233,7 @@ export default {
     },
 
     editPost(id){
+
       console.log('edit')
 
       this.editing = id
@@ -245,6 +254,11 @@ export default {
     },
 
     updatePost(id){
+
+      // this.isloadingEd = true
+
+      this.isloadingDel = true
+      
       
       const post = this.datas.find(post => post.id === id);
       console.log(post)
@@ -258,6 +272,15 @@ export default {
         body: newBody
       })
       .then(response  => {
+
+      // this.isloadingEd = false
+
+      this.isloadingDel = false
+
+
+        swal("succès!", "Votre article a ete Modifer!", "success");
+
+
         console.log(response)
         document.getElementById('title'+id).style.border = 'none'
         document.getElementById('body'+id).style.border = 'none'
@@ -300,28 +323,28 @@ export default {
       });
     },
 
-    deletePostConfirm(id){
+    // deletePostConfirm(id){
 
-      console.log(id)
+    //   console.log(id)
 
-      const post = this.datas.find(post => post.id === id )
+    //   const post = this.datas.find(post => post.id === id )
 
 
       
 
-      axios.delete(apiUri + `/${id}`)
-      .then(response => {
-        console.log(response)
+    //   axios.delete(apiUri + `/${id}`)
+    //   .then(response => {
+    //     console.log(response)
 
-        this.datas.splice(this.datas.findIndex(curr => curr.id == id), 1)
+    //     this.datas.splice(this.datas.findIndex(curr => curr.id == id), 1)
 
-        alert(`article n ${post.id} supprimer avec succes`)
+    //     alert(`article n ${post.id} supprimer avec succes`)
 
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    }
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
+    // }
   },
 
   components: {
