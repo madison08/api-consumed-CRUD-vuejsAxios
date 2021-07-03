@@ -107,6 +107,7 @@
         
         <div class="card">
           <header class="card-header">
+            {{ data.id }}
             <p class="card-header-title" @blur="updatePost(data.id)" :id="'title' + data.id" :class="{ editing: data.id === editing }" :contenteditable="data.id === editing">
               {{ data.title }}
 
@@ -119,7 +120,7 @@
           </header>
           <div class="card-content">
             <div class="content">
-            <p @blur="updatePost(data.id)" :id="'body'+data.id" :contenteditable="data.id === editing">{{ data.body.substring(0, 100) + ' ...' }}</p>
+            <p @blur="updatePost(data.id)" :id="'body'+data.id" :contenteditable="data.id === editing">{{ data.body }}</p>
             </div>
           </div>
           <footer class="card-footer">
@@ -181,6 +182,7 @@ export default {
     return{
       
       datas: [],
+      datasFil: [],
       postTitle: null,
       postBody: null,
       isloading: false,
@@ -207,7 +209,9 @@ export default {
 
         this.isloading = false
 
-        this.datas.push(response.data)
+        this.datas.unshift(response.data)
+
+        
 
         swal("succès!", "Votre article a ete ajouter!", "success");
 
@@ -277,6 +281,17 @@ export default {
 
       this.isloadingDel = false
 
+        console.log(post)
+
+        axios.get(apiUri)
+        .then(response => {
+          // this.datas = response.data
+          // console.log(response.data)
+
+          this.datas = response.data.sort(function(a,b){
+            return b.id - a.id
+          })
+        })
 
         swal("succès!", "Votre article a ete Modifer!", "success");
 
@@ -355,9 +370,20 @@ export default {
     axios.get(apiUri)
     .then(response => {
       this.datas = response.data
-      console.log(response.data)
+      // console.log(response.data)
+
+      this.datas = response.data.sort(function(a,b){
+        return b.id - a.id
+      })
+
+      // console.log(newData)
     })
     .catch(error => console.log(error))
+
+
+    // console.log(this.datas)
+
+    
   }
 }
 </script>
